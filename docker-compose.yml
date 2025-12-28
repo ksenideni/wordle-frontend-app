@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  front:
+    ports:
+      - "80:80"
+    build:
+       context: .
+       args:
+        WORDLE_BACKEND_HOST: http://localhost:8080

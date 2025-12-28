@@ -1,0 +1,50 @@
+
+.green {
+    background: #8fdb8f;
+    border: 2px solid #0b980b;
+    border-radius: 2px;
+    display: inline-block;
+    width: 10%;
+    aspect-ratio : 1 / 1;
+    font-size: 200%;
+}
+
+.grey {
+    background: #bababa;
+    border-radius: 2px;
+    border: 2px solid #9f9e9e; /* Green */
+    display: inline-block;
+    width: 10%;
+    aspect-ratio : 1 / 1;
+    font-size: 200%;
+}
+
+.yellow {
+    background: #ffff85;
+    border-radius: 2px;
+    border: 2px solid #d0d012; /* Green */
+    display: inline-block;
+    width: 10%;
+    aspect-ratio : 1 / 1;
+    font-size: 200%;
+}
+
+.white {
+    background: #ffffff;
+    border-radius: 2px;
+    border: 2px solid #c2c1c1; /* Green */
+    display: inline-block;
+    width: 10%;
+    aspect-ratio : 1 / 1;
+    font-size: 200%;
+}
+
+.specialKey {
+    border-radius: 2px;
+    border: 2px solid #c2c1c1; /* Green */
+    display: inline-block;
+    padding: 0;
+    width: 70px;
+    aspect-ratio: unset;
+    font-size: 125%;
+}

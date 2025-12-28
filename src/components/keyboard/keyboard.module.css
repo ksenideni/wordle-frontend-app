@@ -1,0 +1,12 @@
+.keyboardContainer {
+}
+
+.keyboardRow {
+    display: flex;
+    justify-content: center;
+    /*min-height: 30%;*/
+    /*max-height: 20%;*/
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
