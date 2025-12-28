@@ -31,6 +31,7 @@ export default class AttemptService {
         const currentURL = new URL(currentURLString);
         const chatId = currentURL.searchParams.get('chat_id')
         const userId = currentURL.searchParams.get('user_id')
+        const messageId = currentURL.searchParams.get('message_id')
 
         const result = await axios.post(
             this.prefixURL,
@@ -38,7 +39,8 @@ export default class AttemptService {
             {
                 params: {
                     chatId,
-                    userId
+                    userId,
+                    messageId
                 }
             }
         )
