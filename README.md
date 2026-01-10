@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# Wordle Educational Platform - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Образовательная платформа для изучения английского языка через игру Wordle.
 
-## Available Scripts
+## Установка
 
-In the project directory, you can run:
+```bash
+npm install
+```
 
-### `npm start`
+## Настройка
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Создайте файл `.env` в корне проекта:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+REACT_APP_API_BASE_URL=http://localhost:8080
+```
 
-### `npm test`
+## Запуск
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm start
+```
 
-### `npm run build`
+Приложение будет доступно по адресу `http://localhost:3000`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Функциональность
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Для учителей:
+- Регистрация и вход
+- Управление классами (создание, редактирование, удаление)
+- Управление словарями (создание, добавление/удаление слов)
+- Создание вызовов для классов и студентов
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Для студентов:
+- Регистрация и вход
+- Игровой экран с Wordle
+- Просмотр рейтинга (личная статистика, рейтинг класса, глобальный рейтинг)
+- История стриков
 
-### `npm run eject`
+## Структура проекта
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+src/
+├── components/
+│   ├── auth/          # Компоненты регистрации и входа
+│   ├── teacher/       # Интерфейс учителя
+│   ├── student/       # Интерфейс студента
+│   ├── game/          # Компоненты игры Wordle
+│   └── keyboard/      # Виртуальная клавиатура
+├── service/           # Сервисы для работы с API
+├── reducers/          # Redux reducers
+└── store/             # Redux store
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## API
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Приложение использует REST API, описанный в документации backend.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Технологии
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- React 18
+- Redux Toolkit
+- React Router DOM
+- Axios

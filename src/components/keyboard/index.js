@@ -6,7 +6,7 @@ import {COLOR_WHITE} from "../../constants/constants";
 import styles from './keyboard.module.css';
 
 
-export default function KeyBoard() {
+export default function KeyBoard({ onSubmitWord, disabled }) {
     // const [buffer, words] = useSelector((state) => [state.wordleGame.buffer, state.wordleGame.words]);
     const buffer = useSelector(state => state.wordleGame.buffer);
     const words = useSelector(state => state.wordleGame.words);
@@ -23,12 +23,12 @@ export default function KeyBoard() {
     const row3 = 'zxcvbnm';
 
 
-    const rowArray1 = doCollectArrayOfKey(row1, buffer, dispatch);
-    const rowArray2 = doCollectArrayOfKey(row2, buffer, dispatch);
-    const rowArray3 = doCollectArrayOfKey(row3, buffer, dispatch);
-    rowArray3.push(renderColorKey(rowArray3.length, 'Enter', 'specialKey', enterOnClickFunc(buffer, dispatch)));
+    const rowArray1 = doCollectArrayOfKey(row1, buffer, dispatch, disabled);
+    const rowArray2 = doCollectArrayOfKey(row2, buffer, dispatch, disabled);
+    const rowArray3 = doCollectArrayOfKey(row3, buffer, dispatch, disabled);
+    rowArray3.push(renderColorKey(rowArray3.length, 'Enter', 'specialKey', enterOnClickFunc(buffer, dispatch, onSubmitWord, disabled)));
 
-    rowArray3.unshift(renderColorKey(-1, 'Delete', 'specialKey', deleteOnClickFunc(dispatch)))
+    rowArray3.unshift(renderColorKey(-1, 'Delete', 'specialKey', deleteOnClickFunc(dispatch, disabled)))
     return (
         <div className={styles.keyboardContainer}>
             <div className={styles.keyboardRow}>
@@ -69,18 +69,19 @@ function renderColorKey(key, char, color, onClickFunc) {
 //----------------on click functions----------------on
 function collectArrayOfKeyFactory(charColorMap) {
     const doRenderKey = renderKeyFactory(charColorMap);
-    return (row, buffer, dispatch) => {
+    return (row, buffer, dispatch, disabled) => {
         const rowArray = [];
         for (let i in row) {
             const char = row[i];
-            rowArray.push(doRenderKey(rowArray.length, char, printOnClickFunc(char, buffer, dispatch)));
+            rowArray.push(doRenderKey(rowArray.length, char, printOnClickFunc(char, buffer, dispatch, disabled)));
         }
         return rowArray;
     }
 }
 
-function printOnClickFunc(a, buffer, dispatch) {
+function printOnClickFunc(a, buffer, dispatch, disabled) {
     return () => {
+        if (disabled) return;
         if (buffer.length < 5) {
             dispatch(addToBuffer(a));
         } else {
@@ -89,14 +90,27 @@ function printOnClickFunc(a, buffer, dispatch) {
     };
 }
 
-function enterOnClickFunc(buffer, dispatch) {
+function enterOnClickFunc(buffer, dispatch, onSubmitWord, disabled) {
     return () => {
-        dispatch(postWord(buffer));
+        if (disabled) return;
+        if (buffer.length !== 5) {
+            console.log('Word must be 5 letters');
+            return;
+        }
+        if (onSubmitWord) {
+            // Передаем строку buffer в handleWordSubmit (в Redux buffer - это строка)
+            onSubmitWord(buffer);
+        } else {
+            dispatch(postWord(buffer));
+        }
     }
 }
 
-function deleteOnClickFunc(dispatch) {
-    return () => dispatch(deleteFromBuffer());
+function deleteOnClickFunc(dispatch, disabled) {
+    return () => {
+        if (disabled) return;
+        dispatch(deleteFromBuffer());
+    }
 }
 
 //----------------buildMap func----------------on

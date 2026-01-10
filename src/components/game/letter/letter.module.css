@@ -3,48 +3,54 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background: #8fdb8f;
-    border: 2px solid #0b980b;
-    border-radius: 2px;
-    /*display: inline-block;*/
-    margin: 1px;
+    background: #6aaa64;
+    border: none;
+    border-radius: 4px;
     position: relative;
-    width: 20%;
-    /*aspect-ratio : 1 / 1;*/
-    max-width: 125px;
-    font-size: 256%;
+    width: 62px;
+    height: 62px;
+    font-size: 36px;
+    font-weight: 700;
+    box-sizing: border-box;
+    color: #ffffff;
+    text-transform: uppercase;
+    transition: transform 0.1s ease;
 }
 
 .grey {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background: #bababa;
-    border-radius: 2px;
-    border: 2px solid #9f9e9e; /* Green */
-    margin: 1px;
+    background: #787c7e;
+    border: none;
+    border-radius: 4px;
     position: relative;
-    width: 20%;
-    aspect-ratio: 1 / 1;
-    max-width: 125px;
-    font-size: 256%;
-
+    width: 62px;
+    height: 62px;
+    font-size: 36px;
+    font-weight: 700;
+    box-sizing: border-box;
+    color: #ffffff;
+    text-transform: uppercase;
+    transition: transform 0.1s ease;
 }
 
 .yellow {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background: #ffff85;
-    border-radius: 2px;
-    border: 2px solid #d0d012; /* Green */
-    margin: 1px;
+    background: #c9b458;
+    border: none;
+    border-radius: 4px;
     position: relative;
-    width: 20%;
-    aspect-ratio: 1 / 1;
-    max-width: 125px;
-    font-size: 256%;
-
+    width: 62px;
+    height: 62px;
+    font-size: 36px;
+    font-weight: 700;
+    box-sizing: border-box;
+    color: #ffffff;
+    text-transform: uppercase;
+    transition: transform 0.1s ease;
 }
 
 .white {
@@ -52,13 +58,15 @@
     justify-content: center;
     align-items: center;
     background: #ffffff;
-    border-radius: 2px;
-    border: 2px solid #c2c1c1; /* Green */
-    margin: 1px;
+    border: 2px solid #d3d6da;
+    border-radius: 4px;
     position: relative;
-    width: 20%;
-    aspect-ratio: 1 / 1;
-    max-width: 125px;
-    font-size: 256%;
-
+    width: 62px;
+    height: 62px;
+    font-size: 36px;
+    font-weight: 700;
+    box-sizing: border-box;
+    color: #1a1a1b;
+    text-transform: uppercase;
+    transition: transform 0.1s ease;
 }

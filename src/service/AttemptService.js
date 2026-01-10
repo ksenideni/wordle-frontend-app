@@ -1,49 +1,40 @@
-import {COLOR_GREEN, COLOR_GREY, COLOR_YELLOW} from "../constants/constants";
-import axios from "axios";
+import axios from 'axios';
+import AuthService from './AuthService';
 
-export default class AttemptService {
-    static host = process.env.REACT_APP_WORDLE_BACKEND_HOST
-    // static host = 'http://localhost:8080'
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
 
-    static prefixURL = this.host + '/wordle/attempts'
+class AttemptService {
+  // Сделать попытку угадать слово
+  static async makeAttempt(challengeId, guessedWord) {
+    const authHeader = AuthService.getAuthHeader();
+    const response = await axios.post(
+      `${API_BASE_URL}/attempts`,
+      {
+        challengeId,
+        guessedWord
+      },
+      authHeader
+    );
+    return response.data;
+  }
 
-    static async getAttempts() {
-        console.log('this.host')
-        console.log(this.host)
-        const currentURLString = window.location.href;
-        const currentURL = new URL(currentURLString);
-        const chatId = currentURL.searchParams.get('chat_id')
-        const userId = currentURL.searchParams.get('user_id')
+  // Получить попытки для вызова
+  static async getAttempts(challengeId) {
+    const authHeader = AuthService.getAuthHeader();
+    const response = await axios.get(
+      `${API_BASE_URL}/attempts/challenge/${challengeId}`,
+      authHeader
+    );
+    return response.data;
+  }
 
-        const result = await axios.get(
-            this.prefixURL,
-            {
-                params: {
-                    chatId,
-                    userId
-                },
-            })
-        return result.data
-    }
-
-    static async postAttempt(word) {
-        const currentURLString = window.location.href;
-        const currentURL = new URL(currentURLString);
-        const chatId = currentURL.searchParams.get('chat_id')
-        const userId = currentURL.searchParams.get('user_id')
-        const messageId = currentURL.searchParams.get('message_id')
-
-        const result = await axios.post(
-            this.prefixURL,
-            {currentWord: word},
-            {
-                params: {
-                    chatId,
-                    userId,
-                    messageId
-                }
-            }
-        )
-        return result.data
-    }
+  // Старые методы для обратной совместимости (используются в wordleSlice)
+  static async postAttempt(word) {
+    // Этот метод больше не используется в новом API
+    // Оставлен для обратной совместимости
+    console.warn('postAttempt is deprecated. Use makeAttempt instead.');
+    throw new Error('This method is deprecated. Please use makeAttempt with challengeId.');
+  }
 }
+
+export default AttemptService;

@@ -20,14 +20,30 @@ export const wordleSlice = createSlice({
     name: "wordleReducer",
     initialState: {
         words: [],
-        buffer: ''
+        buffer: '',
+        challenge: null
     },
     reducers: {
         deleteFromBuffer: state => {
             state.buffer = state.buffer.slice(0, -1);
         },
         addToBuffer: (state, action) => {
-            state.buffer += action.payload;
+            if (state.buffer.length < 5) {
+                state.buffer += action.payload;
+            }
+        },
+        setChallenge: (state, action) => {
+            state.challenge = action.payload;
+        },
+        addAttempt: (state, action) => {
+            const { word, colors } = action.payload;
+            state.words.push({ word, colors });
+            state.buffer = '';
+        },
+        resetGame: (state) => {
+            state.words = [];
+            state.buffer = '';
+            state.challenge = null;
         }
     },
     extraReducers: (builder) => {
@@ -48,6 +64,9 @@ export const wordleSlice = createSlice({
 export const {
     deleteFromBuffer,
     addToBuffer,
+    setChallenge,
+    addAttempt,
+    resetGame,
     get,
     post
 } = wordleSlice.actions
@@ -76,12 +95,16 @@ function adapterWord(colorLettersInWord) {
 function getColor(colorName) {
     switch (colorName) {
         case "GREY":
+        case "grey":
             return COLOR_GREY
         case "YELLOW":
+        case "yellow":
             return COLOR_YELLOW
         case "GREEN":
+        case "green":
             return COLOR_GREEN
         default:
-            console.log('COLOR_NOT_FOUND')
+            console.log('COLOR_NOT_FOUND', colorName)
+            return COLOR_GREY
     }
 }
