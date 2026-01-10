@@ -250,10 +250,6 @@ function StudentRanking() {
                 <div className="stat-value">{myStats.completedChallenges || 0}</div>
               </div>
               <div className="stat-item">
-                <div className="stat-label">Процент успеха</div>
-                <div className="stat-value">{(myStats.successRate || 0).toFixed(1)}%</div>
-              </div>
-              <div className="stat-item">
                 <div className="stat-label">Среднее попыток</div>
                 <div className="stat-value">{(myStats.averageAttempts || 0).toFixed(1) || '-'}</div>
               </div>

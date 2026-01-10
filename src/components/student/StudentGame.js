@@ -21,6 +21,7 @@ function StudentGame() {
   const [submitting, setSubmitting] = useState(false);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
+  const [wordHint, setWordHint] = useState('');
 
   const buffer = useSelector(state => state.wordleGame.buffer);
 
@@ -83,7 +84,15 @@ function StudentGame() {
     }
     
     if (!wordString || wordString.length !== 5) {
-      setError('Слово должно содержать 5 букв');
+      // Если букв меньше 5, показываем подсказку вместо ошибки
+      if (wordString && wordString.length > 0 && wordString.length < 5) {
+        setWordHint(`Недостаточно букв (${wordString.length}/5)`);
+        setTimeout(() => {
+          setWordHint('');
+        }, 2000);
+      } else {
+        setError('Слово должно содержать 5 букв');
+      }
       return;
     }
 
@@ -98,6 +107,7 @@ function StudentGame() {
 
     setSubmitting(true);
     setError('');
+    setWordHint(''); // Очищаем подсказку при начале отправки корректного слова
 
     try {
       const attemptData = await AttemptService.makeAttempt(challenge.id, wordString.toUpperCase());
@@ -205,11 +215,22 @@ function StudentGame() {
       }
       
       // Обработка Enter
-      if ((key === 'Enter' || keyLower === 'enter') && buffer.length === 5) {
+      if (key === 'Enter' || keyLower === 'enter') {
         event.preventDefault();
         event.stopPropagation();
-        // buffer - это строка из Redux
-        handleWordSubmit(buffer);
+        
+        if (buffer.length === 5) {
+          // Слово полное - отправляем
+          setWordHint(''); // Очищаем подсказку
+          handleWordSubmit(buffer);
+        } else if (buffer.length > 0 && buffer.length < 5) {
+          // Букв мало - показываем подсказку
+          setWordHint(`Недостаточно букв (${buffer.length}/5)`);
+          // Автоматически скрываем подсказку через 2 секунды
+          setTimeout(() => {
+            setWordHint('');
+          }, 2000);
+        }
         return;
       }
       
@@ -219,6 +240,8 @@ function StudentGame() {
         event.preventDefault();
         event.stopPropagation();
         dispatch(addToBuffer(key.toUpperCase()));
+        // Очищаем подсказку при вводе новой буквы
+        setWordHint('');
       }
     };
 
@@ -301,6 +324,7 @@ function StudentGame() {
 
       <div className="game-container">
         <Wordboard />
+        {wordHint && <div className="word-hint">{wordHint}</div>}
         <div className="keyboard-wrapper">
           <KeyBoard onSubmitWord={handleWordSubmit} disabled={submitting || gameCompleted} />
         </div>

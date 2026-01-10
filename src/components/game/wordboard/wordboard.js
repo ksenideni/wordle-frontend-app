@@ -14,7 +14,7 @@ export default function Wordboard() {
     let bufferColors = createBufferColors();
 
     //заполнение борды текущей попыткой
-    if (words.length < 5) {
+    if (words.length < MAX_NUMBER_OF_ATTEMPTS) {
         attempts.push(renderWordline(attempts.length, bufferColors, buffer));
     }
 

@@ -93,8 +93,13 @@ function printOnClickFunc(a, buffer, dispatch, disabled) {
 function enterOnClickFunc(buffer, dispatch, onSubmitWord, disabled) {
     return () => {
         if (disabled) return;
+        // В Redux buffer - это строка
         if (buffer.length !== 5) {
-            console.log('Word must be 5 letters');
+            // Если букв меньше 5, все равно вызываем onSubmitWord для показа подсказки
+            // но не отправляем слово
+            if (onSubmitWord && buffer.length > 0) {
+                onSubmitWord(buffer); // handleWordSubmit покажет подсказку
+            }
             return;
         }
         if (onSubmitWord) {

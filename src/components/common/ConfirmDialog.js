@@ -23,11 +23,6 @@ function ConfirmDialog({ show, title, message, onConfirm, onCancel, confirmText 
   return (
     <div className="confirm-dialog-overlay" onClick={onCancel}>
       <div className="confirm-dialog" onClick={(e) => e.stopPropagation()}>
-        <div className="confirm-dialog-icon">
-          {type === 'danger' && '⚠️'}
-          {type === 'warning' && '⚠️'}
-          {type === 'info' && 'ℹ️'}
-        </div>
         <h3 className="confirm-dialog-title">{title}</h3>
         <p className="confirm-dialog-message">{message}</p>
         <div className="confirm-dialog-actions">

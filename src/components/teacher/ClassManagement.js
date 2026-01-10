@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ClassService from '../../service/ClassService';
 import DictionaryService from '../../service/DictionaryService';
+import ConfirmDialog from '../common/ConfirmDialog';
 import './Teacher.css';
 
 function ClassManagement() {
@@ -13,6 +14,7 @@ function ClassManagement() {
   const [formData, setFormData] = useState({ name: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [deleteDialog, setDeleteDialog] = useState({ show: false, type: '', id: null, name: '' });
 
   useEffect(() => {
     loadClasses();
@@ -97,38 +99,81 @@ function ClassManagement() {
     }
   };
 
-  const handleDeleteClass = async (classId) => {
-    if (!window.confirm('Вы уверены, что хотите удалить этот класс?')) {
-      return;
-    }
+  const handleDeleteClass = (classId) => {
+    const classToDelete = classes.find(c => c.id === classId);
+    setDeleteDialog({
+      show: true,
+      type: 'class',
+      id: classId,
+      name: classToDelete?.name || 'класс'
+    });
+  };
 
-    try {
-      await ClassService.deleteClass(classId);
-      await loadClasses();
-      if (selectedClass?.id === classId) {
-        setSelectedClass(null);
-        setStudents([]);
+  const handleRemoveStudent = (studentId) => {
+    const studentToRemove = students.find(s => s.id === studentId);
+    const studentName = studentToRemove 
+      ? `${studentToRemove.firstName || studentToRemove.first_name} ${studentToRemove.lastName || studentToRemove.last_name}`
+      : 'студента';
+    setDeleteDialog({
+      show: true,
+      type: 'student',
+      id: studentId,
+      name: studentName
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deleteDialog.type === 'class') {
+      try {
+        await ClassService.deleteClass(deleteDialog.id);
+        await loadClasses();
+        if (selectedClass?.id === deleteDialog.id) {
+          setSelectedClass(null);
+          setStudents([]);
+        }
+        setDeleteDialog({ show: false, type: '', id: null, name: '' });
+        setError(''); // Очищаем ошибки при успехе
+      } catch (err) {
+        // Показываем ошибку от бэкенда или стандартное сообщение
+        const errorMessage = err.response?.data?.message || err.response?.data?.error || 'Ошибка при удалении класса';
+        setError(errorMessage);
+        setDeleteDialog({ show: false, type: '', id: null, name: '' });
       }
-    } catch (err) {
-      setError('Ошибка при удалении класса');
+    } else if (deleteDialog.type === 'student') {
+      try {
+        await ClassService.removeStudent(selectedClass.id, deleteDialog.id);
+        await loadClassDetails(selectedClass.id);
+        setDeleteDialog({ show: false, type: '', id: null, name: '' });
+        setError(''); // Очищаем ошибки при успехе
+      } catch (err) {
+        // Показываем ошибку от бэкенда или стандартное сообщение
+        const errorMessage = err.response?.data?.message || err.response?.data?.error || 'Ошибка при удалении студента';
+        setError(errorMessage);
+        setDeleteDialog({ show: false, type: '', id: null, name: '' });
+      }
     }
   };
 
-  const handleRemoveStudent = async (studentId) => {
-    if (!window.confirm('Вы уверены, что хотите удалить этого студента из класса?')) {
-      return;
-    }
-
-    try {
-      await ClassService.removeStudent(selectedClass.id, studentId);
-      await loadClassDetails(selectedClass.id);
-    } catch (err) {
-      setError('Ошибка при удалении студента');
-    }
+  const handleCancelDelete = () => {
+    setDeleteDialog({ show: false, type: '', id: null, name: '' });
   };
 
   return (
     <div className="class-management">
+      <ConfirmDialog
+        show={deleteDialog.show}
+        title={deleteDialog.type === 'class' ? 'Удаление класса' : 'Удаление студента'}
+        message={deleteDialog.type === 'class' 
+          ? `Вы уверены, что хотите удалить класс "${deleteDialog.name}"? Это действие нельзя отменить.`
+          : `Вы уверены, что хотите удалить ${deleteDialog.name} из класса? Это действие нельзя отменить.`
+        }
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        confirmText="Удалить"
+        cancelText="Отмена"
+        type="danger"
+      />
+      
       <h2>Управление классами</h2>
       
       {error && <div className="error-message">{error}</div>}
