@@ -153,149 +153,155 @@ function ChallengeCreation() {
 
   return (
     <div className="challenge-creation">
-      <h2>Создание вызовов</h2>
-
       {error && <div className="error-message">{error}</div>}
       {success && <div className="success-message">{success}</div>}
 
       <form onSubmit={handleSubmit} className="challenge-form">
-        <div className="form-group">
-          <label>Тип вызова:</label>
-          <select
-            value={formData.challengeType}
-            onChange={(e) => {
-              const newType = e.target.value;
-              setFormData({ 
-                ...formData, 
-                challengeType: newType,
-                wordSource: (newType === 'class' || newType === 'individual') ? 'dictionary' : formData.wordSource
-              });
-            }}
-            required
-          >
-            <option value="class">Для всего класса (одно слово)</option>
-            <option value="all_individual">Индивидуальные для всех студентов</option>
-            <option value="individual">Индивидуальный для одного студента</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Класс:</label>
-          <select
-            value={formData.classId}
-            onChange={(e) => setFormData({ ...formData, classId: e.target.value })}
-            required
-          >
-            <option value="">Выберите класс</option>
-            {classes.map((cls) => (
-              <option key={cls.id} value={cls.id}>
-                {cls.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {formData.challengeType === 'individual' && (
+        <div className="challenge-form-section">
+          <div className="challenge-form-section-title">Основные параметры</div>
+          
           <div className="form-group">
-            <label>Студент:</label>
-            <select name="studentId" required>
-              <option value="">Выберите студента</option>
-              {students.map((student) => (
-                <option key={student.id} value={student.id}>
-                  {student.firstName || student.first_name} {student.lastName || student.last_name} ({student.login})
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        <div className="form-group">
-          <label>Дата:</label>
-          <input
-            type="date"
-            value={formData.date}
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-          />
-          <small>Оставьте пустым для сегодняшней даты</small>
-        </div>
-
-        {/* Для 'all_individual' всегда нужен словарь */}
-        {formData.challengeType === 'all_individual' && (
-          <div className="form-group">
-            <label>Словарь:</label>
+            <label>Тип вызова:</label>
             <select
-              value={formData.dictionaryId}
-              onChange={(e) => setFormData({ ...formData, dictionaryId: e.target.value })}
+              value={formData.challengeType}
+              onChange={(e) => {
+                const newType = e.target.value;
+                setFormData({ 
+                  ...formData, 
+                  challengeType: newType,
+                  wordSource: (newType === 'class' || newType === 'individual') ? 'dictionary' : formData.wordSource
+                });
+              }}
               required
             >
-              <option value="">Выберите словарь</option>
-              {dictionaries.map((dict) => (
-                <option key={dict.id} value={dict.id}>
-                  {dict.name} ({dict.wordCount || 0} слов)
+              <option value="class">Для всего класса (одно слово)</option>
+              <option value="all_individual">Индивидуальные для всех студентов</option>
+              <option value="individual">Индивидуальный для одного студента</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Класс:</label>
+            <select
+              value={formData.classId}
+              onChange={(e) => setFormData({ ...formData, classId: e.target.value })}
+              required
+            >
+              <option value="">Выберите класс</option>
+              {classes.map((cls) => (
+                <option key={cls.id} value={cls.id}>
+                  {cls.name}
                 </option>
               ))}
             </select>
-            <small>Будут созданы индивидуальные вызовы со случайными словами для каждого студента</small>
           </div>
-        )}
 
-        {/* Для 'class' и 'individual': выбор между словарем и явным словом */}
-        {(formData.challengeType === 'class' || formData.challengeType === 'individual') && (
-          <>
+          {formData.challengeType === 'individual' && (
             <div className="form-group">
-              <label>Источник слова:</label>
-              <select
-                value={formData.wordSource}
-                onChange={(e) => {
-                  const newWordSource = e.target.value;
-                  setFormData({ 
-                    ...formData, 
-                    wordSource: newWordSource,
-                    dictionaryId: newWordSource === 'explicit' ? '' : formData.dictionaryId,
-                    word: newWordSource === 'dictionary' ? '' : formData.word
-                  });
-                }}
-              >
-                <option value="dictionary">Выбрать случайное слово из словаря</option>
-                <option value="explicit">Указать слово явно</option>
+              <label>Студент:</label>
+              <select name="studentId" required>
+                <option value="">Выберите студента</option>
+                {students.map((student) => (
+                  <option key={student.id} value={student.id}>
+                    {student.firstName || student.first_name} {student.lastName || student.last_name} ({student.login})
+                  </option>
+                ))}
               </select>
             </div>
+          )}
 
-            {formData.wordSource === 'dictionary' && (
+          <div className="form-group">
+            <label>Дата:</label>
+            <input
+              type="date"
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            />
+            <small>Оставьте пустым для сегодняшней даты</small>
+          </div>
+        </div>
+
+        <div className="challenge-form-section">
+          <div className="challenge-form-section-title">Источник слова</div>
+
+          {/* Для 'all_individual' всегда нужен словарь */}
+          {formData.challengeType === 'all_individual' && (
+            <div className="form-group">
+              <label>Словарь:</label>
+              <select
+                value={formData.dictionaryId}
+                onChange={(e) => setFormData({ ...formData, dictionaryId: e.target.value })}
+                required
+              >
+                <option value="">Выберите словарь</option>
+                {dictionaries.map((dict) => (
+                  <option key={dict.id} value={dict.id}>
+                    {dict.name} ({dict.wordCount || 0} слов)
+                  </option>
+                ))}
+              </select>
+              <small>Будут созданы индивидуальные вызовы со случайными словами для каждого студента</small>
+            </div>
+          )}
+
+          {/* Для 'class' и 'individual': выбор между словарем и явным словом */}
+          {(formData.challengeType === 'class' || formData.challengeType === 'individual') && (
+            <>
               <div className="form-group">
-                <label>Словарь:</label>
+                <label>Источник слова:</label>
                 <select
-                  value={formData.dictionaryId}
-                  onChange={(e) => setFormData({ ...formData, dictionaryId: e.target.value })}
-                  required
+                  value={formData.wordSource}
+                  onChange={(e) => {
+                    const newWordSource = e.target.value;
+                    setFormData({ 
+                      ...formData, 
+                      wordSource: newWordSource,
+                      dictionaryId: newWordSource === 'explicit' ? '' : formData.dictionaryId,
+                      word: newWordSource === 'dictionary' ? '' : formData.word
+                    });
+                  }}
                 >
-                  <option value="">Выберите словарь</option>
-                  {dictionaries.map((dict) => (
-                    <option key={dict.id} value={dict.id}>
-                      {dict.name} ({dict.wordCount || 0} слов)
-                    </option>
-                  ))}
+                  <option value="dictionary">Выбрать случайное слово из словаря</option>
+                  <option value="explicit">Указать слово явно</option>
                 </select>
-                <small>Будет выбрано случайное слово из выбранного словаря</small>
               </div>
-            )}
 
-            {formData.wordSource === 'explicit' && (
-              <div className="form-group">
-                <label>Слово:</label>
-                <input
-                  type="text"
-                  value={formData.word}
-                  onChange={(e) => setFormData({ ...formData, word: e.target.value.toUpperCase() })}
-                  maxLength={5}
-                  placeholder="Введите слово из 5 букв"
-                  required
-                />
-                <small>Укажите слово из 5 букв, которое будет использоваться для всех</small>
-              </div>
-            )}
-          </>
-        )}
+              {formData.wordSource === 'dictionary' && (
+                <div className="form-group">
+                  <label>Словарь:</label>
+                  <select
+                    value={formData.dictionaryId}
+                    onChange={(e) => setFormData({ ...formData, dictionaryId: e.target.value })}
+                    required
+                  >
+                    <option value="">Выберите словарь</option>
+                    {dictionaries.map((dict) => (
+                      <option key={dict.id} value={dict.id}>
+                        {dict.name} ({dict.wordCount || 0} слов)
+                      </option>
+                    ))}
+                  </select>
+                  <small>Будет выбрано случайное слово из выбранного словаря</small>
+                </div>
+              )}
+
+              {formData.wordSource === 'explicit' && (
+                <div className="form-group">
+                  <label>Слово:</label>
+                  <input
+                    type="text"
+                    value={formData.word}
+                    onChange={(e) => setFormData({ ...formData, word: e.target.value.toUpperCase() })}
+                    maxLength={5}
+                    placeholder="Введите слово из 5 букв"
+                    required
+                  />
+                  <small>Укажите слово из 5 букв, которое будет использоваться для всех</small>
+                </div>
+              )}
+            </>
+          )}
+        </div>
 
         <button type="submit" disabled={loading} className="create-button">
           {loading ? 'Создание...' : 'Создать вызов'}

@@ -7,9 +7,10 @@
   animation: slideDown 0.3s ease-out;
   min-width: 300px;
   max-width: 500px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
   overflow: hidden;
+  border: 1px solid #d3d6da;
 }
 
 @keyframes slideDown {
@@ -31,17 +32,17 @@
 }
 
 .notification-success {
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  background: #6aaa64;
   color: white;
 }
 
 .notification-error {
-  background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+  background: #dc3545;
   color: white;
 }
 
 .notification-info {
-  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  background: #787c7e;
   color: white;
 }
 

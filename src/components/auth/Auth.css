@@ -3,15 +3,15 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff;
   padding: 20px;
 }
 
 .auth-card {
   background: white;
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 40px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid #d3d6da;
   width: 100%;
   max-width: 400px;
 }
@@ -48,26 +48,25 @@
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #6aaa64;
 }
 
 .auth-button {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6aaa64;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: background 0.15s;
   margin-top: 10px;
 }
 
 .auth-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  background: #5a9554;
 }
 
 .auth-button:disabled {
@@ -92,7 +91,7 @@
 }
 
 .auth-link a {
-  color: #667eea;
+  color: #6aaa64;
   text-decoration: none;
   font-weight: 500;
 }

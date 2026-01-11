@@ -16,38 +16,47 @@ function StreakCalendar({ streakHistory }) {
     return map;
   }, [streakHistory]);
 
-  // Формируем календарную сетку
+  // Формируем календарную сетку (ровно 5 недель = 35 дней, включая текущую неделю)
   const calendarGrid = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const days = [];
     
-    // Определяем первый день для отображения (30 дней назад)
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - 29);
-    startDate.setHours(0, 0, 0, 0);
+    // Определяем день недели сегодня (0 = воскресенье, 1 = понедельник, ...)
+    let dayOfWeek = today.getDay();
+    dayOfWeek = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Преобразуем: вс=0 -> вс=6, пн=1 -> пн=0
     
-    // Определяем день недели первого дня (0 = воскресенье, 1 = понедельник, ...)
-    // Преобразуем, чтобы неделя начиналась с понедельника
-    let firstDayOfWeek = startDate.getDay();
-    firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1; // вс=0 -> вс=6, пн=1 -> пн=0
+    // Находим понедельник текущей недели
+    const thisWeekMonday = new Date(today);
+    thisWeekMonday.setDate(today.getDate() - dayOfWeek);
+    thisWeekMonday.setHours(0, 0, 0, 0);
     
-    // Добавляем пустые ячейки для выравнивания начала недели
-    for (let i = 0; i < firstDayOfWeek; i++) {
-      days.push({ date: null, completed: false, isEmpty: true });
-    }
+    // Вычисляем понедельник, который будет началом календаря (5 недель назад от текущей недели)
+    const calendarStartMonday = new Date(thisWeekMonday);
+    calendarStartMonday.setDate(thisWeekMonday.getDate() - 28); // 28 дней = 4 полные недели назад
+    calendarStartMonday.setHours(0, 0, 0, 0);
     
-    // Добавляем все дни
-    for (let i = 0; i < 30; i++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i);
-      // Форматируем дату в YYYY-MM-DD с учетом локального времени
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const dateStr = `${year}-${month}-${day}`;
-      const completed = historyMap.get(dateStr) || false;
-      days.push({ date: date, dateStr: dateStr, completed: completed, isEmpty: false });
+    // Добавляем ровно 35 дней (5 недель × 7 дней = 35 дней)
+    // От понедельника 5-й недели назад до воскресенья текущей недели включительно
+    for (let i = 0; i < 35; i++) {
+      const date = new Date(calendarStartMonday);
+      date.setDate(calendarStartMonday.getDate() + i);
+      date.setHours(0, 0, 0, 0);
+      
+      // Проверяем, находится ли этот день в диапазоне последних 35 дней от сегодня
+      // (показываем только дни до сегодня включительно)
+      if (date > today) {
+        // День еще не наступил - показываем как пустой
+        days.push({ date: null, completed: false, isEmpty: true });
+      } else {
+        // Форматируем дату в YYYY-MM-DD с учетом локального времени
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+        const completed = historyMap.get(dateStr) || false;
+        days.push({ date: date, dateStr: dateStr, completed: completed, isEmpty: false });
+      }
     }
     
     return days;
@@ -75,27 +84,37 @@ function StreakCalendar({ streakHistory }) {
 
   return (
     <div className="streak-calendar-wrapper">
-      <div className="calendar-header">
-        <div className="week-days">
-          {weekDays.map(day => (
-            <div key={day} className="week-day-header">{day}</div>
-          ))}
+      <div className="calendar-container">
+        <div className="calendar-header-row">
+          <div className="week-day-spacer"></div>
+          <div className="week-days-row">
+            {weekDays.map(day => (
+              <div key={day} className="week-day-header">{day}</div>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="calendar-grid">
-        {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} className="calendar-week">
-            {week.map((day, dayIndex) => (
-              <div
-                key={dayIndex}
-                className={`calendar-day ${day.isEmpty ? 'empty' : ''} ${day.completed ? 'completed' : 'missed'}`}
-                title={formatTooltip(day)}
-              >
-                {!day.isEmpty && <span className="day-number">{formatDay(day.date)}</span>}
+        <div className="calendar-grid-container">
+          <div className="calendar-weeks-column">
+            {weeks.map((week, weekIndex) => (
+              <div key={weekIndex} className="week-number"></div>
+            ))}
+          </div>
+          <div className="calendar-grid">
+            {weeks.map((week, weekIndex) => (
+              <div key={weekIndex} className="calendar-week">
+                {week.map((day, dayIndex) => (
+                  <div
+                    key={dayIndex}
+                    className={`calendar-day ${day.isEmpty ? 'empty' : ''} ${day.completed ? 'completed' : 'missed'}`}
+                    title={formatTooltip(day)}
+                  >
+                    {!day.isEmpty && <span className="day-number">{formatDay(day.date)}</span>}
+                  </div>
+                ))}
               </div>
             ))}
           </div>
-        ))}
+        </div>
       </div>
       <div className="calendar-legend">
         <div className="legend-item">
@@ -145,8 +164,8 @@ function StudentRanking() {
       const globalRank = await RankingService.getGlobalRanking(50);
       setGlobalRanking(globalRank.rankings || []);
 
-      // Загружаем стрики
-      const streaksData = await RankingService.getStreaks(30);
+      // Загружаем стрики (35 дней для заполнения всех клеток календаря)
+      const streaksData = await RankingService.getStreaks(35);
       setStreaks(streaksData);
     } catch (err) {
       setError('Ошибка при загрузке данных');

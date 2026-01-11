@@ -3,13 +3,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff;
   padding: 20px;
 }
 
 .home-content {
   text-align: center;
-  color: white;
+  color: #1a1a1b;
   max-width: 800px;
 }
 
@@ -17,7 +17,6 @@
   font-size: 48px;
   margin-bottom: 20px;
   font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .home-subtitle {
@@ -35,16 +34,16 @@
 
 .action-card {
   background: white;
-  border-radius: 15px;
+  border-radius: 4px;
   padding: 40px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  color: #333;
+  border: 1px solid #d3d6da;
+  color: #1a1a1b;
 }
 
 .action-card h2 {
   margin-top: 0;
   margin-bottom: 30px;
-  color: #667eea;
+  color: #1a1a1b;
   font-size: 28px;
 }
 
@@ -65,29 +64,29 @@
 }
 
 .action-button.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6aaa64;
   color: white;
+  border: none;
 }
 
 .action-button.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  background: #5a9554;
 }
 
 .action-button.secondary {
   background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
+  color: #1a1a1b;
+  border: 1px solid #d3d6da;
 }
 
 .action-button.secondary:hover {
-  background: #f0f4ff;
+  background: #f9f9f9;
 }
 
 .loading {
   text-align: center;
   padding: 40px;
-  color: white;
+  color: #1a1a1b;
   font-size: 18px;
 }
 

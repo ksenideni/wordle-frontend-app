@@ -218,8 +218,6 @@ function DictionaryManagement() {
         onCancel={handleDeleteCancel}
       />
       
-      <h2>Управление словарями</h2>
-      
       {error && <div className="error-message">{error}</div>}
 
       <div className="dictionaries-layout">
@@ -276,26 +274,32 @@ function DictionaryManagement() {
           )}
 
           <div className="dictionaries-items">
-            {dictionaries.map((dict) => (
-              <div
-                key={dict.id}
-                className={`dictionary-item ${selectedDictionaryId === dict.id ? 'active' : ''}`}
-                onClick={() => {
-                  setSelectedDictionaryId(dict.id);
-                  setSelectedDictionary(null); // Сбрасываем детали, чтобы показать загрузку
-                }}
-              >
-                <div className="dictionary-name">{dict.name}</div>
-                <div className="dictionary-info">
-                  <span>Тема: {dict.theme}</span>
-                  <span>Слов: {dict.wordCount || 0}</span>
-                </div>
+            {dictionaries.length === 0 ? (
+              <div className="empty-list-message">
+                Пока нет словарей. Создайте первый словарь.
               </div>
-            ))}
+            ) : (
+              dictionaries.map((dict) => (
+                <div
+                  key={dict.id}
+                  className={`dictionary-item ${selectedDictionaryId === dict.id ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedDictionaryId(dict.id);
+                    setSelectedDictionary(null); // Сбрасываем детали, чтобы показать загрузку
+                  }}
+                >
+                  <div className="dictionary-name">{dict.name}</div>
+                  <div className="dictionary-info">
+                    <span>Тема: {dict.theme}</span>
+                    <span>Слов: {dict.wordCount || 0}</span>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
-        {selectedDictionaryId && (
+        {selectedDictionaryId ? (
           <div className="dictionary-details">
             {selectedDictionary ? (
               <>
@@ -364,6 +368,10 @@ function DictionaryManagement() {
             ) : (
               <div className="loading">Загрузка словаря...</div>
             )}
+          </div>
+        ) : (
+          <div className="dictionary-details empty-details">
+            <div>Выберите словарь для просмотра деталей</div>
           </div>
         )}
       </div>

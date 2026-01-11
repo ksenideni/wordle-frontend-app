@@ -10,9 +10,6 @@ import LoginStudent from './components/auth/LoginStudent';
 
 // Teacher components
 import TeacherDashboard from './components/teacher/TeacherDashboard';
-import ClassManagement from './components/teacher/ClassManagement';
-import DictionaryManagement from './components/teacher/DictionaryManagement';
-import ChallengeCreation from './components/teacher/ChallengeCreation';
 
 // Student components
 import StudentGame from './components/student/StudentGame';
@@ -60,7 +57,7 @@ function App() {
           path="/teacher/classes"
           element={
             <ProtectedRoute requiredRole="teacher">
-              <ClassManagement />
+              <Navigate to="/teacher/dashboard" replace />
             </ProtectedRoute>
           }
         />
@@ -68,7 +65,7 @@ function App() {
           path="/teacher/dictionaries"
           element={
             <ProtectedRoute requiredRole="teacher">
-              <DictionaryManagement />
+              <Navigate to="/teacher/dashboard" replace />
             </ProtectedRoute>
           }
         />
@@ -76,7 +73,7 @@ function App() {
           path="/teacher/challenges"
           element={
             <ProtectedRoute requiredRole="teacher">
-              <ChallengeCreation />
+              <Navigate to="/teacher/dashboard" replace />
             </ProtectedRoute>
           }
         />

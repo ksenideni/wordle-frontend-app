@@ -174,8 +174,6 @@ function ClassManagement() {
         type="danger"
       />
       
-      <h2>Управление классами</h2>
-      
       {error && <div className="error-message">{error}</div>}
 
       <div className="classes-layout">
@@ -213,25 +211,31 @@ function ClassManagement() {
           )}
 
           <div className="classes-items">
-            {classes.map((cls) => (
-              <div
-                key={cls.id}
-                className={`class-item ${selectedClass?.id === cls.id ? 'active' : ''} ${cls.isMine ? 'my-class' : ''}`}
-                onClick={() => setSelectedClass(cls)}
-              >
-                <div className="class-name">{cls.name}</div>
-                <div className="class-info">
-                  <span>Студентов: {cls.studentCount !== undefined ? cls.studentCount : (cls.student_count || 0)}</span>
-                  {cls.teacherName && (
-                    <span>Учитель: {cls.teacherName}</span>
-                  )}
-                </div>
+            {classes.length === 0 ? (
+              <div className="empty-list-message">
+                Пока нет классов. Создайте первый класс.
               </div>
-            ))}
+            ) : (
+              classes.map((cls) => (
+                <div
+                  key={cls.id}
+                  className={`class-item ${selectedClass?.id === cls.id ? 'active' : ''} ${cls.isMine ? 'my-class' : ''}`}
+                  onClick={() => setSelectedClass(cls)}
+                >
+                  <div className="class-name">{cls.name}</div>
+                  <div className="class-info">
+                    <span>Студентов: {cls.studentCount !== undefined ? cls.studentCount : (cls.student_count || 0)}</span>
+                    {cls.teacherName && (
+                      <span>Учитель: {cls.teacherName}</span>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
-        {selectedClass && (
+        {selectedClass ? (
           <div className="class-details">
             <div className="details-header">
               <h3>{selectedClass.name}</h3>
@@ -297,14 +301,6 @@ function ClassManagement() {
                         </span>
                         <span className="student-login">{student.login}</span>
                       </div>
-                      {selectedClass.isMine && (
-                        <button
-                          onClick={() => handleRemoveStudent(student.id)}
-                          className="remove-student-button"
-                        >
-                          Удалить
-                        </button>
-                      )}
                     </div>
                   ))
                 )}
@@ -316,6 +312,10 @@ function ClassManagement() {
                 <p>Это класс другого учителя. Вы можете просматривать информацию о классе и список студентов, но не можете редактировать класс.</p>
               </div>
             )}
+          </div>
+        ) : (
+          <div className="class-details empty-details">
+            <div>Выберите класс для просмотра деталей</div>
           </div>
         )}
       </div>
