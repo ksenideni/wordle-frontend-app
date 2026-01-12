@@ -140,7 +140,7 @@ function StudentGame() {
                            attemptNumber < 5 ? 'попытки' : 'попыток';
         setNotification({
           show: true,
-          message: `🎉 Поздравляем! Вы угадали слово "${guessedWord}" за ${attemptNumber} ${attemptText}! Получено очков: ${attemptData.points}`,
+          message: `Поздравляем! Вы угадали слово "${guessedWord}" за ${attemptNumber} ${attemptText}! Получено очков: ${attemptData.points}`,
           type: 'success'
         });
         // Автоматически скрываем уведомление через 5 секунд
